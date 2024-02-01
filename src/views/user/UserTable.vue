@@ -28,9 +28,11 @@ onMounted(() => {
   getTableData()
 })
 
+const ACCOUNT_STATUS_INACTIVE = 0
+const ACCOUNT_STATUS_ACTIVE = 1
 const userStatusOptions: SelectOption[] = [
-  { label: '冻结', value: 0 },
-  { label: '可用', value: 1 }
+  { label: '冻结', value: ACCOUNT_STATUS_INACTIVE },
+  { label: '可用', value: ACCOUNT_STATUS_ACTIVE }
 ]
 const searchFormList = ref<SearchFormListItem[]>([
   { type: 'text', label: '用户名', prop: 'username' },
@@ -52,6 +54,13 @@ const tableColumn = ref<TableColumnItem[]>([
         return '未知'
       }
     },
+    setClassName: (value) => {
+      switch(value) {
+        case ACCOUNT_STATUS_INACTIVE: return 'color-inactive'
+        case ACCOUNT_STATUS_ACTIVE: return 'color-success'
+        default: return 'color-inactive'
+      }
+    }
   },
 ])
 

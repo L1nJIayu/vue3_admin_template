@@ -3,14 +3,16 @@
       <el-table-column
         v-for="column in tableColumn"
         :label="column.label"
-        :prop="column.prop"
-        class-name="status"
-        :formatter="formatter(column)">
-        <template v-if="column.isSlot" #default="{ row }">
+        :prop="column.prop">
+        <template #default="{ row }">
           <slot
+            v-if="column.isSlot"
             :name="column.prop"
             :row="row"
             :value="row[column.prop]"></slot>
+          <div v-else :class="getTableColumnClassName(column, row)">
+            {{ formatter(column, row) }}
+          </div>
         </template>
       </el-table-column>
   </el-table>
@@ -29,7 +31,8 @@ export type TableColumnItem = {
   label: string
   prop: string
   isSlot?: boolean
-  formatter?: (value: any) => string
+  formatter?: <T>(value: T) => string
+  setClassName?: <T>(value: T) => string
 }
 type Pagination = {
   currentPage: number
@@ -53,21 +56,25 @@ watch(props.pagination, (newV, oldV) => {
 })
 
 // 数据格式化
-const formatter = (tableColumnItem: TableColumnItem) => {
-  return (row: any, column: string, cellValue: any, index: number) => {
-    if(tableColumnItem.formatter) {
-      return tableColumnItem.formatter(cellValue)
+const formatter = (tableColumnItem: TableColumnItem, row: any) => {
+  if(tableColumnItem.formatter) {
+    return tableColumnItem.formatter(row[tableColumnItem.prop])
+  } else {
+    if((row[tableColumnItem.prop] ?? '') !== '') {
+      return row[tableColumnItem.prop]
     } else {
-      return cellValue
+      return '- -'
     }
   }
 }
 
-</script>
-
-<style lang="less" scoped>
-
-:deep(.status) {
-  color: red;
+// 列className
+const getTableColumnClassName = (column: TableColumnItem, row: any) => {
+  if(column.setClassName) {
+    return column.setClassName(row[column.prop])
+  } else {
+    return ''
+  }
 }
-</style>
+
+</script>
