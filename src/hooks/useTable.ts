@@ -29,11 +29,12 @@ export function useTable (api: (params: any) => Promise<any>) {
         pageNum: pagination.value.currentPage,
         pageSize: pagination.value.pageSize,
       }
-      console.log('getTableData', params)
       const { data } = await api(params)
       const { list, total } = data
       tableData.value = list
       pagination.value.total = total
+
+      console.log('getTableData', params, list)
 
     } catch (err) {
       console.error(err)

@@ -1,10 +1,6 @@
 <template>
   <div class="page">
-    <BaseSearch :form-list="searchFormList" />
-    <!-- <div>
-      <el-input v-model="searchForm.username" placeholder="用户名"></el-input>
-      <el-button @click="search">搜索</el-button>
-    </div> -->
+    <BaseSearch :form-list="searchFormList" @search="getTableDataWidthSearchParams" />
     <BaseTable
       :table-column="tableColumn"
       :table-data="tableData"
@@ -21,33 +17,42 @@ import { ref, onMounted } from 'vue'
 import { useTable } from '@/hooks'
 
 import { getUserTableDataApi } from '@/api/modules/user'
-import BaseSearch, { type SearchFormListItem } from '@/components/BaseSeach.vue'
+import BaseSearch from '@/components/BaseSeach.vue'
+import type {
+  SearchFormListItem,
+  SelectOption
+} from '@/components/BaseSeach.vue'
 import BaseTable, { type TableColumnItem } from '@/components/BaseTable.vue'
 
 onMounted(() => {
   getTableData()
 })
 
-type SearchForm = {
-  username: string
-}
+const userStatusOptions: SelectOption[] = [
+  { label: '冻结', value: 0 },
+  { label: '可用', value: 1 }
+]
 const searchFormList = ref<SearchFormListItem[]>([
   { type: 'text', label: '用户名', prop: 'username' },
+  { type: 'text', label: '昵称', prop: 'nickname' },
+  { type: 'select', label: '状态', prop: 'username', options: userStatusOptions },
 ])
-const searchForm = ref<SearchForm>({
-  username: ''
-})
-const search = () => {
-  getTableDataWidthSearchParams({
-    ...searchForm.value
-  })
-}
-
 const tableColumn = ref<TableColumnItem[]>([
   { label: 'ID', prop: 'id' },
   { label: '用户名', prop: 'username' },
   { label: '昵称', prop: 'nickname' },
-  { label: '状态', prop: 'status', isSlot: true }
+  {
+    label: '状态',
+    prop: 'status',
+    formatter: (value) => {
+      const target = userStatusOptions.find((option: SelectOption) => option.value == value)
+      if(target) {
+        return target.label
+      } else {
+        return '未知'
+      }
+    },
+  },
 ])
 
 const {

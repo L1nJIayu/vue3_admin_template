@@ -2,7 +2,7 @@
 
 const userTableData = [
   { id: 1, username: 'jeffrey1', nickname: 'J1', status: 1 },
-  { id: 2, username: 'jeffrey2', nickname: 'J2', status: 1 },
+  { id: 2, username: 'jeffrey2', nickname: 'J2', status: 0 },
   { id: 3, username: 'jeffrey3', nickname: 'J3', status: 1 },
   { id: 4, username: 'jeffrey4', nickname: 'J4', status: 1 },
   { id: 5, username: 'jeffrey5', nickname: 'J5', status: 1 },
