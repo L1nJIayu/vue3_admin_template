@@ -1,20 +1,50 @@
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, watch } from 'vue'
 
-export function useTable () {
+export function useTable (api: (params: any) => Promise<any>) {
+
+  // 表格数据
   const tableData = ref([])
 
-  const getTableData = () => {
-    tableData.value = [
-      { id: 1, username: 'Jeffrey', status: 1 },
-      { id: 2, username: 'Toms', status: 1 },
-      { id: 3, username: 'Mike', status: 1 },
-      { id: 4, username: 'WeiRan', status: 1 },
-    ]
+  // 表格分页信息
+  const pagination = ref({
+    currentPage: 1,
+    pageSize: 10,
+    total: 0
+  })
+
+  // 表格搜索参数
+  const searchForm = ref({})
+  const getTableDataWidthSearchParams = (searchParams = {}) => {
+    pagination.value.currentPage = 1
+    searchForm.value = {
+      ...searchParams
+    }
+    getTableData()
+  }
+
+  const getTableData = async () => {
+    try {
+      const params = {
+        ...searchForm.value,
+        pageNum: pagination.value.currentPage,
+        pageSize: pagination.value.pageSize,
+      }
+      console.log('getTableData', params)
+      const { data } = await api(params)
+      const { list, total } = data
+      tableData.value = list
+      pagination.value.total = total
+
+    } catch (err) {
+      console.error(err)
+    }
   }
 
 
   return {
-    ...toRefs(tableData),
-    getTableData
+    tableData,
+    pagination,
+    getTableData,
+    getTableDataWidthSearchParams,
   }
 }

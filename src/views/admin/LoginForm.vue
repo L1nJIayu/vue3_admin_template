@@ -12,18 +12,6 @@
           type="password"
           placeholder="密码" />
       </el-form-item>
-      <el-form-item prop="validateCode">
-        <el-input
-          v-model="formData.validateCode"
-          placeholder="验证码">
-          <template #suffix>
-            <img
-              class="captchaImg"
-              :src="captchaImgSrc"
-              @click="getCaptchaImg"/>
-          </template>
-        </el-input>
-      </el-form-item>
     </el-form>
     <el-button
       class="loginButton"
@@ -34,50 +22,20 @@
 
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getCaptchaImgApi, loginApi } from '@/api/modules/admin'
-
-onMounted(() => {
-  getCaptchaImg()
-})
 
 const router = useRouter()
 
 const formData = ref({
   username: import.meta.env.VITE_LOGIN_USERNAME || '',
-  password: import.meta.env.VITE_LOGIN_PASSWORD || '',
-  validateCode: ''
+  password: import.meta.env.VITE_LOGIN_PASSWORD || ''
 })
-
-/* ================ 登录验证码 ================ */
-const captchaImgSrc = ref('')
-const captchaKey = ref('')
-const getCaptchaImg = async () => {
-  try {
-    const res = await getCaptchaImgApi()
-    if(res.data) {
-      const {
-        verifyCodeKey,
-        verifyCodeBase64
-      } = res.data
-
-      captchaKey.value = verifyCodeKey
-      captchaImgSrc.value = verifyCodeBase64
-
-    }
-
-  } catch (err) {
-    console.error(err)
-  }
-  
-}
 
 
 /* ================ 登录 ================ */
 const login = async () => {
   try {
-    await loginApi({...formData.value})
 
     router.push({
       name: 'UserTable'
@@ -88,9 +46,11 @@ const login = async () => {
   }
 }
 
+
+
 </script>
 
-<style lang="less" scoped>
+<style lang="less" scoped> 
 .login_form {
   width: 400px;
   padding: 24px;
