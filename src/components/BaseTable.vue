@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from 'vue'
+import { watch, watchPostEffect } from 'vue'
 export type TableColumnItem = {
   label: string
   prop: string
@@ -49,10 +49,18 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   paginationChange: [newV: Pagination, oldV: Pagination]
+  // paginationChange: []
 }>()
 
+// watchPostEffect(() => {
+//   if(props.pagination.currentPage || props.pagination.pageSize) {
+//     emits('paginationChange')
+//   }
+// })
 watch(props.pagination, (newV, oldV) => {
   emits('paginationChange', newV, oldV)
+}, {
+  immediate: false
 })
 
 // 数据格式化

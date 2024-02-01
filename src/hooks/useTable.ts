@@ -32,7 +32,7 @@ export function useTable (api: (params: any) => Promise<any>) {
       const { data } = await api(params)
       const { list, total } = data
       tableData.value = list
-      pagination.value.total = total
+      // pagination.value.total = total
 
       console.log('getTableData', params, list)
 
