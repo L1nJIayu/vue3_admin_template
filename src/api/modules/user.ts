@@ -19,7 +19,7 @@ export function getUserTableDataApi (params: {
   pageNum: number
   pageSize: number
 }) {
-  const { pageNum, pageSize } = params
+  const { pageNum = 1, pageSize = 10 } = params
   const result = userTableData.slice(
     (pageNum - 1) * pageSize,
     (pageNum * pageSize)

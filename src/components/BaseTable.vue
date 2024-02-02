@@ -16,9 +16,14 @@
         </template>
       </el-table-column>
   </el-table>
+  <BasePagination
+    v-if="pagination"
+    :pagination="pagination"
+    @pagination-change="paginationChange" />
 </template>
 
 <script setup lang="ts">
+import BasePagination from './BasePagination.vue'
 export type TableColumnItem = {
   label: string
   prop: string
@@ -35,12 +40,14 @@ type Pagination = {
 defineProps<{
   tableColumn: TableColumnItem[]
   tableData: Array<any>
-  pagination: Pagination
+  pagination?: Pagination
 }>()
 
 const emits = defineEmits<{
   paginationChange: []
 }>()
+
+const paginationChange = () => emits('paginationChange')
 
 
 // 数据格式化

@@ -5,12 +5,9 @@
       :table-column="tableColumn"
       :table-data="tableData"
       :pagination="pagination"
-      @pagination-change="paginationChange">
+      @pagination-change="getTableData">
       <template #status="{ value }">{{ value }}</template>
     </BaseTable>
-    <BasePagination
-      :pagination="pagination"
-      @pagination-change="getTableData" />
   </div>
 </template>
 
@@ -26,7 +23,6 @@ import type {
   SelectOption
 } from '@/components/BaseSearch.vue'
 import BaseTable, { type TableColumnItem } from '@/components/BaseTable.vue'
-import BasePagination from '@/components/BasePagination.vue'
 
 onMounted(() => {
   getTableData()
@@ -73,10 +69,10 @@ const {
   pagination,
   getTableData,
   getTableDataWidthSearchParams
-} = useTable(getUserTableDataApi)
+} = useTable(getUserTableDataApi, {
+  isPagination: true
+})
 
-
-const paginationChange = () => getTableData()
 
 
 

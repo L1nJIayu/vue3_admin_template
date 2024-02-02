@@ -1,6 +1,14 @@
 import { ref, toRefs, watch } from 'vue'
 import type { Pagination } from '@/components/BasePagination.vue'
-export function useTable (api: (params: any) => Promise<any>) {
+
+export interface UseTableOptions {
+  isPagination?: boolean
+}
+export function useTable (api: (params: any) => Promise<any>, options: UseTableOptions = {}) {
+
+  const {
+    isPagination = true
+  } = options
 
   // 表格数据
   const tableData = ref([])
@@ -18,10 +26,10 @@ export function useTable (api: (params: any) => Promise<any>) {
     searchForm.value = {
       ...searchParams
     }
-    if(pagination.value.currentPage === 1) {
-      getTableData()
-    } else {
+    if(isPagination && pagination.value.currentPage !== 1) {
       pagination.value.currentPage = 1  // 页面变动即会触发getTableData
+    } else {
+      getTableData()
     }
   }
 
@@ -31,11 +39,12 @@ export function useTable (api: (params: any) => Promise<any>) {
       pagination.value.pageSize = newPagination.pageSize
     }
     try {
-      const params = {
+      let params = {
         ...searchForm.value,
-        pageNum: pagination.value.currentPage,
-        pageSize: pagination.value.pageSize,
+        pageNum: isPagination ? pagination.value.currentPage : undefined,
+        pageSize: isPagination ? pagination.value.pageSize : undefined,
       }
+
       const { data } = await api(params)
       const { list, total } = data
       tableData.value = list
