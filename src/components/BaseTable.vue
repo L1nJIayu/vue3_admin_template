@@ -16,17 +16,9 @@
         </template>
       </el-table-column>
   </el-table>
-
-  <el-pagination
-    v-model:page-size="pagination.pageSize"
-    v-model:current-page="pagination.currentPage"
-    :total="pagination.total"
-    layout="prev,pager,next"></el-pagination>
-
 </template>
 
 <script setup lang="ts">
-import { watch, watchPostEffect } from 'vue'
 export type TableColumnItem = {
   label: string
   prop: string
@@ -40,28 +32,16 @@ type Pagination = {
   total: number
 }
 
-
-const props = defineProps<{
+defineProps<{
   tableColumn: TableColumnItem[]
   tableData: Array<any>
   pagination: Pagination
 }>()
 
 const emits = defineEmits<{
-  paginationChange: [newV: Pagination, oldV: Pagination]
-  // paginationChange: []
+  paginationChange: []
 }>()
 
-// watchPostEffect(() => {
-//   if(props.pagination.currentPage || props.pagination.pageSize) {
-//     emits('paginationChange')
-//   }
-// })
-watch(props.pagination, (newV, oldV) => {
-  emits('paginationChange', newV, oldV)
-}, {
-  immediate: false
-})
 
 // 数据格式化
 const formatter = (tableColumnItem: TableColumnItem, row: any) => {

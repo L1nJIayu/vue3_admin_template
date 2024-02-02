@@ -136,7 +136,6 @@ const getColSpan = (size: viewportSize, column: SearchFormListItem) => {
       case 'xl': return 4
     }
   }
-  
 }
 
 const formData = ref<SearchParams>({})

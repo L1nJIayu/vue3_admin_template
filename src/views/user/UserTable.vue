@@ -8,6 +8,9 @@
       @pagination-change="paginationChange">
       <template #status="{ value }">{{ value }}</template>
     </BaseTable>
+    <BasePagination
+      :pagination="pagination"
+      @pagination-change="getTableData" />
   </div>
 </template>
 
@@ -17,12 +20,13 @@ import { ref, onMounted } from 'vue'
 import { useTable } from '@/hooks'
 
 import { getUserTableDataApi } from '@/api/modules/user'
-import BaseSearch from '@/components/BaseSeach.vue'
+import BaseSearch from '@/components/BaseSearch.vue'
 import type {
   SearchFormListItem,
   SelectOption
-} from '@/components/BaseSeach.vue'
+} from '@/components/BaseSearch.vue'
 import BaseTable, { type TableColumnItem } from '@/components/BaseTable.vue'
+import BasePagination from '@/components/BasePagination.vue'
 
 onMounted(() => {
   getTableData()
