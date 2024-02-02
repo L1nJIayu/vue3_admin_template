@@ -5,6 +5,8 @@ vue3工程模板，提供各类工具，用于快速构建后台管理系统
 每次开启新项目时，都要把各种各样的依赖的工具安装，拷贝，着实麻烦。
 此模板可以直接拿来用，目的就在于快速开发管理后台的页面。
 
+目标：尽可能复用逻辑，减少代码编写，达到配置字段、功能项即可完成页面开发。
+
 ## 安装和运行
 ```shell
 pnpm i
@@ -20,6 +22,17 @@ pnpm run dev
 - ElementPlus
 - Axios
 - Less
+
+## 组件
+1. [BaseTable](./src/components/BaseTable.vue)
+2. [BasePagination](./src/components/BasePagination.vue)
+3. [BaseSearch](./src/components/BaseSearch.vue)
+4. BaseForm(待开发)
+5. BaseDetail(待开发)
+
+## hooks
+1. [useTable](./src/hooks/useTable.ts)
+
 
 ## 示例
 
@@ -100,9 +113,6 @@ const {
 } = useTable(getUserTableDataApi, {
   isPagination: true
 })
-
-
-
 
 </script>
 ```
